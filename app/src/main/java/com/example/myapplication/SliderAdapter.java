@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,11 +16,13 @@ import java.util.List;
 public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder>
 {
     private List<SlidersItam> slidersItams;
+
     private ViewPager2 viewPager2;
 
-    public SliderAdapter(List<SlidersItam> slidersItams, ViewPager2 viewPager2) {
+     SliderAdapter(List<SlidersItam> slidersItams, ViewPager2 viewPager2) {
         this.slidersItams = slidersItams;
         this.viewPager2 = viewPager2;
+
     }
 
     @NonNull
@@ -34,9 +37,14 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
         );
     }
 
+
+
     @Override
     public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
         holder.setImage(slidersItams.get(position));
+        if(position == slidersItams.size() - 2){
+            viewPager2.post(runnable);
+        }
     }
 
     @Override
@@ -47,15 +55,25 @@ class SliderViewHolder extends RecyclerView.ViewHolder  {
 
 
     private RoundedImageView imageView;
+    private TextView opis;
      SliderViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.imageView = imageView.findViewById(R.id.imageSlide);
+        this.imageView = itemView.findViewById(R.id.imageSlide);
+       // this.opis = itemView.findViewById(R.id.opis);
+
     }
     void setImage(SlidersItam slidersItam){
         imageView.setImageResource(slidersItam.getImage());
+
     }
 
 }
-
+private Runnable runnable = new Runnable() {
+    @Override
+    public void run() {
+        slidersItams.addAll(slidersItams);
+        notifyDataSetChanged();
+    }
+};
 
 }

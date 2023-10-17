@@ -2,7 +2,7 @@ package com.example.myapplication;
 
 public class SlidersItam {
     private int image;
-    SlidersItam(int image){
+    public SlidersItam(int image){
         this.image = image;
     }
     public int getImage(){
