@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,7 +14,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
-public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderViewHolder>
+public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.ViewHolder>
 {
     private List<SlidersItam> slidersItams;
     private ViewPager2 viewPager2;
@@ -24,10 +26,10 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
 
     @NonNull
     @Override
-    public SliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SliderViewHolder(
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(
                 LayoutInflater.from(parent.getContext()).inflate(
-                        R.layout.slide_contain,
+                        R.layout.viewpager2,
                         parent,
                         false
                 )
@@ -35,27 +37,42 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.SliderView
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
-        holder.setImage(slidersItams.get(position));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            SlidersItam slidersItam = slidersItams.get(position);
+            holder.imgID.setImageResource(slidersItam.getImage());
+            holder.opis.setText(slidersItam.getDescripiotn());
+        if(position == slidersItams.size() - 2){
+            viewPager2.post(runnable);
+        }
     }
 
     @Override
     public int getItemCount() {
         return slidersItams.size();
     }
-class SliderViewHolder extends RecyclerView.ViewHolder  {
+class ViewHolder extends RecyclerView.ViewHolder  {
 
 
-    private RoundedImageView imageView;
-     SliderViewHolder(@NonNull View itemView) {
+    ImageView imgID;
+    TextView opis;
+
+
+    public ViewHolder(@NonNull View itemView) {
         super(itemView);
-        this.imageView = imageView.findViewById(R.id.imageSlide);
+
+        imgID = itemView.findViewById(R.id.imageView);
+        opis = itemView.findViewById(R.id.opis);
     }
-    void setImage(SlidersItam slidersItam){
-        imageView.setImageResource(slidersItam.getImage());
-    }
+
 
 }
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            slidersItams.addAll(slidersItams);
+            notifyDataSetChanged();
+        }
+    };
 
 
 }
